@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const brandController = require("../../controllers/ai-chatbot/brandController");
+const noteController = require("../../controllers/ai-chatbot/noteController");
 const {
-  validateAddBrand,
+  validateAddNote,
 } = require("../../middlewares/validators/aiChatbotValidators");
 
-router.post("/:ownerId", validateAddBrand, brandController.addBrand);
+router.post("/", validateAddNote, noteController.addNote);
 
 module.exports = router;

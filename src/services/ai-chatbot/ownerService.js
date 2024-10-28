@@ -11,6 +11,7 @@ const addOwner = async ({ name, bio }) => {
         bio: normalizedBio,
       },
     });
+
     if (existingOwner) {
       return {
         status: 400,

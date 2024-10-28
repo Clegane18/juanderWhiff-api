@@ -50,7 +50,7 @@ const addBrand = async ({
       name: normalizedName,
       country: normalizedCountry,
       description: normalizedDescription,
-      website: normalizedWebsite,
+      website,
       logoUrl,
     });
 

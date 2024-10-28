@@ -1,4 +1,3 @@
-// models/index.js
 const sequelize = require("../db");
 
 const Owner = require("./ai-chatbot/ownerModel");
@@ -6,7 +5,7 @@ const Brand = require("./ai-chatbot/brandModel");
 const Perfume = require("./ai-chatbot/perfumeModel");
 const Note = require("./ai-chatbot/noteModel");
 const PerfumeNote = require("./ai-chatbot/perfumeNoteModel");
-const Comparison = require("./ai-chatbot/comparisonModel"); // Optional
+const Comparison = require("./ai-chatbot/comparisonModel");
 
 // Owners and Brands
 Owner.hasMany(Brand, {
@@ -45,9 +44,6 @@ Note.belongsToMany(Perfume, {
   otherKey: "perfumeId",
   onDelete: "CASCADE",
 });
-
-// Optional: Users and their interactions
-// Define associations if necessary
 
 // Optional: Comparisons
 Comparison.belongsTo(Perfume, {
