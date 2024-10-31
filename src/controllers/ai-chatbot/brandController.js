@@ -12,4 +12,16 @@ const addBrand = async (req, res) => {
   return res.status(result.status).json(result.data);
 };
 
-module.exports = { addBrand };
+const getAllBrand = async (req, res) => {
+  const result = await brandService.getAllBrand();
+  return res.status(result.status).json(result.data);
+};
+
+const getBrandsByOwnerId = async (req, res) => {
+  const result = await brandService.getBrandsByOwnerId({
+    ownerId: req.params.ownerId,
+  });
+  return res.status(result.status).json(result.data);
+};
+
+module.exports = { addBrand, getAllBrand, getBrandsByOwnerId };

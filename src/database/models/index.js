@@ -1,5 +1,4 @@
 const sequelize = require("../db");
-
 const Owner = require("./ai-chatbot/ownerModel");
 const Brand = require("./ai-chatbot/brandModel");
 const Perfume = require("./ai-chatbot/perfumeModel");
@@ -10,10 +9,12 @@ const Comparison = require("./ai-chatbot/comparisonModel");
 // Owners and Brands
 Owner.hasMany(Brand, {
   foreignKey: "ownerId",
+  as: "brands",
   onDelete: "CASCADE",
 });
 Brand.belongsTo(Owner, {
   foreignKey: "ownerId",
+  as: "owner",
 });
 
 // Brands and Perfumes
@@ -61,7 +62,6 @@ module.exports = {
   Perfume,
   Note,
   PerfumeNote,
-  User,
   Comparison,
   sequelize,
 };

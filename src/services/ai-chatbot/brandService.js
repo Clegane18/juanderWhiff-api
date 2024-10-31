@@ -1,5 +1,4 @@
-const Brand = require("../../database/models/ai-chatbot/brandModel");
-const Owner = require("../../database/models/ai-chatbot/ownerModel");
+const { Brand, Owner } = require("../../database/models/index");
 const { normalizeTexts } = require("../../utils/normalize");
 
 const addBrand = async ({
@@ -72,4 +71,77 @@ const addBrand = async ({
   }
 };
 
-module.exports = { addBrand };
+const getAllBrand = async () => {
+  try {
+    const brands = await Brand.findAll({
+      order: [["id", "ASC"]],
+      include: [
+        {
+          model: Owner,
+          as: "owner",
+          attributes: ["id", "name"],
+        },
+      ],
+    });
+
+    return {
+      status: 200,
+      message: "All brands fetched successfully.",
+      data: brands,
+    };
+  } catch (error) {
+    console.error("Error in getAllBrand service:", error);
+    throw {
+      status: 500,
+      message: "Error retrieving brands",
+    };
+  }
+};
+
+const getBrandsByOwnerId = async ({ ownerId }) => {
+  try {
+    const owner = await Owner.findByPk(ownerId);
+
+    if (!owner) {
+      return {
+        status: 404,
+        data: {
+          message: `Owner with ID ${ownerId} was not found.`,
+        },
+      };
+    }
+
+    const brands = await Brand.findAll({
+      where: { ownerId },
+      order: [["id", "ASC"]],
+      include: [
+        {
+          model: Owner,
+          as: "owner",
+          attributes: ["id", "name"],
+        },
+      ],
+    });
+
+    if (brands.length === 0) {
+      return {
+        status: 404,
+        message: "No brands found for this owner",
+      };
+    }
+
+    return {
+      status: 200,
+      message: "Brands fetched successfully.",
+      data: brands,
+    };
+  } catch (error) {
+    console.error("Error in getBrandsByOwnerId service:", error);
+    throw {
+      status: 500,
+      message: "Error retrieving brands by owner ID",
+    };
+  }
+};
+
+module.exports = { addBrand, getAllBrand, getBrandsByOwnerId };

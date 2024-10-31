@@ -7,4 +7,7 @@ const {
 
 router.post("/:ownerId", validateAddBrand, brandController.addBrand);
 
+router.get("/", brandController.getAllBrand);
+router.get("/:ownerId", brandController.getBrandsByOwnerId);
+
 module.exports = router;
