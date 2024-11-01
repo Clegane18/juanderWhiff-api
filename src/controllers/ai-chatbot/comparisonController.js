@@ -9,4 +9,20 @@ const compareOgAndLocalPerfumes = async (req, res) => {
   return res.status(result.status).json(result.data);
 };
 
-module.exports = { compareOgAndLocalPerfumes };
+const getAllComparisons = async (req, res) => {
+  const result = await comparisonService.getAllComparisons();
+  return res.status(result.status).json(result.data);
+};
+
+const getComparisonByID = async (req, res) => {
+  const result = await comparisonService.getComparisonByID({
+    id: req.params.id,
+  });
+  return res.status(result.status).json(result.data);
+};
+
+module.exports = {
+  compareOgAndLocalPerfumes,
+  getAllComparisons,
+  getComparisonByID,
+};
