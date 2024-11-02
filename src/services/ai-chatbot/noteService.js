@@ -39,4 +39,49 @@ const addNote = async ({ fragranceNote }) => {
   }
 };
 
-module.exports = { addNote };
+const getAllNotes = async () => {
+  try {
+    const notes = await Note.findAll({
+      order: [["id", "ASC"]],
+    });
+
+    return {
+      status: 200,
+      message: "All notes fetched successfully.",
+      data: notes,
+    };
+  } catch (error) {
+    console.error("Error in getAllNotes service:", error);
+    throw {
+      status: 500,
+      message: "Error retrieving notes",
+    };
+  }
+};
+
+const getNoteById = async ({ noteID }) => {
+  try {
+    const note = await Note.findByPk(noteID);
+
+    if (!note) {
+      return {
+        status: 404,
+        data: { message: `Note with id ${noteID} not found.` },
+      };
+    }
+
+    return {
+      status: 200,
+      message: "Note fetched successfully.",
+      data: note,
+    };
+  } catch (error) {
+    console.error("Error in getNoteById service:", error);
+    throw {
+      status: 500,
+      message: "Error retrieving note",
+    };
+  }
+};
+
+module.exports = { addNote, getAllNotes, getNoteById };

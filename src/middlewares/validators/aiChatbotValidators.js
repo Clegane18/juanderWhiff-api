@@ -101,6 +101,24 @@ const validateGetComparisonByID = (req, res, next) => {
   next();
 };
 
+const validateGetNoteByID = (req, res, next) => {
+  const dataToValidate = {
+    noteID: req.params.noteID,
+  };
+
+  const { error } = getNoteByIDSchema.validate(dataToValidate, {
+    abortEarly: false,
+  });
+
+  if (error) {
+    return res.status(400).json({
+      error: error.details.map((detail) => detail.message).join(", "),
+    });
+  }
+
+  next();
+};
+
 // Schemas
 const createPerfumeSchema = Joi.object({
   brandId: Joi.number().integer().required().messages({
@@ -266,6 +284,13 @@ const getComparisonByIDSchema = Joi.object({
   }),
 });
 
+const getNoteByIDSchema = Joi.object({
+  noteID: Joi.number().integer().required().messages({
+    "number.base": "Note ID must be a number.",
+    "any.required": "Note ID is required.",
+  }),
+});
+
 module.exports = {
   validateAddPerfume,
   validateAddOwner,
@@ -274,4 +299,5 @@ module.exports = {
   validateAddPerfumeNote,
   validateComparePerfumes,
   validateGetComparisonByID,
+  validateGetNoteByID,
 };
