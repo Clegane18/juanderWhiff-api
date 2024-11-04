@@ -19,7 +19,7 @@ const getAllBrand = async (req, res) => {
 
 const getBrandsByOwnerId = async (req, res) => {
   const result = await brandService.getBrandsByOwnerId({
-    ownerId: req.params.ownerId,
+    id: req.params.id,
   });
   return res.status(result.status).json(result.data);
 };

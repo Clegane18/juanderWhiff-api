@@ -8,4 +8,16 @@ const addOwner = async (req, res) => {
   return res.status(result.status).json(result.data);
 };
 
-module.exports = { addOwner };
+const getAllOwners = async (req, res) => {
+  const result = await ownerService.getAllOwners();
+  return res.status(result.status).json(result.data);
+};
+
+const getOwnerById = async (req, res) => {
+  const result = await ownerService.getOwnerById({
+    id: req.params.id,
+  });
+  return res.status(result.status).json(result.data);
+};
+
+module.exports = { addOwner, getAllOwners, getOwnerById };

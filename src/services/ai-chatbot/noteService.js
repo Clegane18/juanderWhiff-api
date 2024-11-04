@@ -45,6 +45,13 @@ const getAllNotes = async () => {
       order: [["id", "ASC"]],
     });
 
+    if (notes.length === 0) {
+      return {
+        status: 404,
+        data: { message: "No notes found." },
+      };
+    }
+
     return {
       status: 200,
       message: "All notes fetched successfully.",
@@ -59,14 +66,14 @@ const getAllNotes = async () => {
   }
 };
 
-const getNoteById = async ({ noteID }) => {
+const getNoteById = async ({ id }) => {
   try {
-    const note = await Note.findByPk(noteID);
+    const note = await Note.findByPk(id);
 
     if (!note) {
       return {
         status: 404,
-        data: { message: `Note with id ${noteID} not found.` },
+        data: { message: `Note with id ${id} not found.` },
       };
     }
 

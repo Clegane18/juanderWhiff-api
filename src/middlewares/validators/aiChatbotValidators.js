@@ -83,12 +83,12 @@ const validateComparePerfumes = (req, res, next) => {
   next();
 };
 
-const validateGetComparisonByID = (req, res, next) => {
+const validateID = (req, res, next) => {
   const dataToValidate = {
     id: req.params.id,
   };
 
-  const { error } = getComparisonByIDSchema.validate(dataToValidate, {
+  const { error } = validateIDSchema.validate(dataToValidate, {
     abortEarly: false,
   });
 
@@ -100,25 +100,6 @@ const validateGetComparisonByID = (req, res, next) => {
 
   next();
 };
-
-const validateGetNoteByID = (req, res, next) => {
-  const dataToValidate = {
-    noteID: req.params.noteID,
-  };
-
-  const { error } = getNoteByIDSchema.validate(dataToValidate, {
-    abortEarly: false,
-  });
-
-  if (error) {
-    return res.status(400).json({
-      error: error.details.map((detail) => detail.message).join(", "),
-    });
-  }
-
-  next();
-};
-
 // Schemas
 const createPerfumeSchema = Joi.object({
   brandId: Joi.number().integer().required().messages({
@@ -277,17 +258,10 @@ const comparePerfumesSchema = Joi.object({
   }),
 });
 
-const getComparisonByIDSchema = Joi.object({
+const validateIDSchema = Joi.object({
   id: Joi.number().integer().required().messages({
-    "number.base": "Comparison ID must be a number.",
-    "any.required": "Comparison ID is required.",
-  }),
-});
-
-const getNoteByIDSchema = Joi.object({
-  noteID: Joi.number().integer().required().messages({
-    "number.base": "Note ID must be a number.",
-    "any.required": "Note ID is required.",
+    "number.base": "id must be a number.",
+    "any.required": "id is required.",
   }),
 });
 
@@ -298,6 +272,5 @@ module.exports = {
   validateAddNote,
   validateAddPerfumeNote,
   validateComparePerfumes,
-  validateGetComparisonByID,
-  validateGetNoteByID,
+  validateID,
 };

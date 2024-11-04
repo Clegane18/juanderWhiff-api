@@ -13,7 +13,7 @@ const getAllNotes = async (req, res) => {
 };
 
 const getNoteById = async (req, res) => {
-  const result = await noteService.getNoteById({ noteID: req.params.noteID });
+  const result = await noteService.getNoteById({ id: req.params.id });
   return res.status(result.status).json(result.data);
 };
 

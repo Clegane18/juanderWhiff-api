@@ -41,4 +41,56 @@ const addOwner = async ({ name, bio }) => {
   }
 };
 
-module.exports = { addOwner };
+const getAllOwners = async () => {
+  try {
+    const owner = await Owner.findAll({
+      order: [["id", "ASC"]],
+    });
+
+    if (owner.length === 0) {
+      return {
+        status: 404,
+        data: { message: "No owner found." },
+      };
+    }
+
+    return {
+      status: 200,
+      message: "All owners fetched successfully.",
+      data: owner,
+    };
+  } catch (error) {
+    console.error("Error in getAllOwners service:", error);
+    throw {
+      status: 500,
+      message: "Error retrieving all owners",
+    };
+  }
+};
+
+const getOwnerById = async ({ id }) => {
+  try {
+    const owner = await Owner.findByPk(id);
+
+    if (!owner) {
+      return {
+        status: 404,
+        data: { message: `Owner with id ${id} not found.` },
+      };
+    }
+
+    return {
+      status: 200,
+      message: "Owner fetched successfully.",
+      data: owner,
+    };
+  } catch (error) {
+    console.error("Error in getOwnerById service:", error);
+    throw {
+      status: 500,
+      message: "Error retrieving owner",
+    };
+  }
+};
+
+module.exports = { addOwner, getAllOwners, getOwnerById };

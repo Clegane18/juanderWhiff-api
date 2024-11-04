@@ -3,7 +3,7 @@ const router = express.Router();
 const comparisonController = require("../../controllers/ai-chatbot/comparisonController");
 const {
   validateComparePerfumes,
-  validateGetComparisonByID,
+  validateID,
 } = require("../../middlewares/validators/aiChatbotValidators");
 
 router.post(
@@ -14,10 +14,6 @@ router.post(
 
 router.get("/", comparisonController.getAllComparisons);
 
-router.get(
-  "/:id",
-  validateGetComparisonByID,
-  comparisonController.getComparisonByID
-);
+router.get("/:id", validateID, comparisonController.getComparisonByID);
 
 module.exports = router;

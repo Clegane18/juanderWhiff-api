@@ -84,6 +84,13 @@ const getAllBrand = async () => {
       ],
     });
 
+    if (brands.length === 0) {
+      return {
+        status: 404,
+        data: { message: "No brands found." },
+      };
+    }
+
     return {
       status: 200,
       message: "All brands fetched successfully.",
@@ -98,21 +105,21 @@ const getAllBrand = async () => {
   }
 };
 
-const getBrandsByOwnerId = async ({ ownerId }) => {
+const getBrandsByOwnerId = async ({ id }) => {
   try {
-    const owner = await Owner.findByPk(ownerId);
+    const owner = await Owner.findByPk(id);
 
     if (!owner) {
       return {
         status: 404,
         data: {
-          message: `Owner with ID ${ownerId} was not found.`,
+          message: `Owner with ID ${id} was not found.`,
         },
       };
     }
 
     const brands = await Brand.findAll({
-      where: { ownerId },
+      where: { ownerId: id },
       order: [["id", "ASC"]],
       include: [
         {
@@ -126,7 +133,9 @@ const getBrandsByOwnerId = async ({ ownerId }) => {
     if (brands.length === 0) {
       return {
         status: 404,
-        message: "No brands found for this owner",
+        data: {
+          message: `Owner with ID ${id} exists but has no brands yet.`,
+        },
       };
     }
 
