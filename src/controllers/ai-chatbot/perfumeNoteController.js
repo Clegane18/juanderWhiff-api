@@ -9,4 +9,16 @@ const addPerfumeNotes = async (req, res) => {
   return res.status(result.status).json(result.data);
 };
 
-module.exports = { addPerfumeNotes };
+const getAllPerfumeNotes = async (req, res) => {
+  const result = await perfumeNoteService.getAllPerfumeNotes();
+  return res.status(result.status).json(result.data);
+};
+
+const getPerfumeNoteById = async (req, res) => {
+  const result = await perfumeNoteService.getPerfumeNoteById({
+    id: req.params.id,
+  });
+  return res.status(result.status).json(result.data);
+};
+
+module.exports = { addPerfumeNotes, getAllPerfumeNotes, getPerfumeNoteById };

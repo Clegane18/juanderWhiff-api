@@ -59,7 +59,7 @@ const addPerfume = async ({
       status: 200,
       data: {
         message: "Perfume added successfully",
-        perfume: newPerfume,
+        newPerfume: newPerfume,
       },
     };
   } catch (error) {

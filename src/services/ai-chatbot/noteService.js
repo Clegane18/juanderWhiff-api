@@ -54,8 +54,10 @@ const getAllNotes = async () => {
 
     return {
       status: 200,
-      message: "All notes fetched successfully.",
-      data: notes,
+      data: {
+        message: "All notes fetched successfully.",
+        allNotes: notes,
+      },
     };
   } catch (error) {
     console.error("Error in getAllNotes service:", error);
@@ -79,8 +81,10 @@ const getNoteById = async ({ id }) => {
 
     return {
       status: 200,
-      message: "Note fetched successfully.",
-      data: note,
+      data: {
+        message: "Note fetched successfully.",
+        note: note,
+      },
     };
   } catch (error) {
     console.error("Error in getNoteById service:", error);

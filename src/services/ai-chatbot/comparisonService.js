@@ -47,7 +47,7 @@ const compareOgAndLocalPerfumes = async ({
       status: 201,
       data: {
         message: "New comparison added successfully",
-        note: newComparison,
+        comparison: newComparison,
       },
     };
   } catch (error) {
@@ -96,7 +96,7 @@ const getAllComparisons = async () => {
       status: 200,
       data: {
         message: "Comparisons fetched successfully",
-        data: comparisons,
+        allComparisons: comparisons,
       },
     };
   } catch (error) {
@@ -143,7 +143,7 @@ const getComparisonByID = async ({ id }) => {
       status: 200,
       data: {
         message: "Comparison fetched successfully",
-        data: comparison,
+        comparison: comparison,
       },
     };
   } catch (error) {

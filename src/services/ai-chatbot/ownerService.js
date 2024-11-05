@@ -27,7 +27,7 @@ const addOwner = async ({ name, bio }) => {
       status: 201,
       data: {
         message: "Owner info added successfully",
-        owner: newOwner,
+        newOwner: newOwner,
       },
     };
   } catch (error) {
@@ -56,8 +56,10 @@ const getAllOwners = async () => {
 
     return {
       status: 200,
-      message: "All owners fetched successfully.",
-      data: owner,
+      data: {
+        message: "All owners fetched successfully.",
+        owners: owner,
+      },
     };
   } catch (error) {
     console.error("Error in getAllOwners service:", error);
@@ -81,8 +83,10 @@ const getOwnerById = async ({ id }) => {
 
     return {
       status: 200,
-      message: "Owner fetched successfully.",
-      data: owner,
+      data: {
+        message: "Owner fetched successfully.",
+        owner: owner,
+      },
     };
   } catch (error) {
     console.error("Error in getOwnerById service:", error);

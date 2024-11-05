@@ -46,6 +46,24 @@ Note.belongsToMany(Perfume, {
   onDelete: "CASCADE",
 });
 
+// Perfumes and PerfumeNotes (One-to-Many)
+Perfume.hasMany(PerfumeNote, {
+  foreignKey: "perfumeId",
+  onDelete: "CASCADE",
+});
+PerfumeNote.belongsTo(Perfume, {
+  foreignKey: "perfumeId",
+});
+
+// Notes and PerfumeNotes (One-to-Many)
+Note.hasMany(PerfumeNote, {
+  foreignKey: "noteId",
+  onDelete: "CASCADE",
+});
+PerfumeNote.belongsTo(Note, {
+  foreignKey: "noteId",
+});
+
 // Optional: Comparisons
 Comparison.belongsTo(Perfume, {
   as: "Perfume",

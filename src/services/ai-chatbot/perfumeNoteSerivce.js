@@ -1,6 +1,4 @@
-const PerfumeNote = require("../../database/models/ai-chatbot/perfumeNoteModel");
-const Perfume = require("../../database/models/ai-chatbot/perfumeModel");
-const Note = require("../../database/models/ai-chatbot/noteModel");
+const { PerfumeNote, Perfume, Note } = require("../../database/models/index");
 
 const addPerfumeNotes = async ({ perfumeId, noteIds, noteType }) => {
   try {
@@ -46,7 +44,7 @@ const addPerfumeNotes = async ({ perfumeId, noteIds, noteType }) => {
       status: 201,
       data: {
         message: "Perfume notes added successfully.",
-        addedNotes,
+        newPerfumeNote: addedNotes,
       },
     };
   } catch (error) {
@@ -60,4 +58,144 @@ const addPerfumeNotes = async ({ perfumeId, noteIds, noteType }) => {
   }
 };
 
-module.exports = { addPerfumeNotes };
+const getAllPerfumeNotes = async () => {
+  try {
+    const perfumeNotes = await PerfumeNote.findAll({
+      include: [
+        {
+          model: Perfume,
+          attributes: ["id", "name"],
+        },
+        {
+          model: Note,
+          attributes: ["id", "name"],
+        },
+      ],
+      attributes: ["noteType"],
+    });
+
+    if (!perfumeNotes || perfumeNotes.length === 0) {
+      return {
+        status: 404,
+        data: {
+          message: "No perfume notes found.",
+        },
+      };
+    }
+
+    const perfumeMap = {};
+
+    perfumeNotes.forEach((note) => {
+      const { noteType, Perfume, Note } = note;
+
+      if (!perfumeMap[Perfume.id]) {
+        perfumeMap[Perfume.id] = {
+          Perfume: {
+            id: Perfume.id,
+            name: Perfume.name,
+          },
+          TopNotes: [],
+          MiddleNotes: [],
+          BaseNotes: [],
+        };
+      }
+
+      if (noteType === "Top") {
+        perfumeMap[Perfume.id].TopNotes.push(Note);
+      } else if (noteType === "Middle") {
+        perfumeMap[Perfume.id].MiddleNotes.push(Note);
+      } else if (noteType === "Base") {
+        perfumeMap[Perfume.id].BaseNotes.push(Note);
+      }
+    });
+
+    const structuredPerfumeNotes = Object.values(perfumeMap);
+
+    return {
+      status: 200,
+      data: {
+        message: "All perfume notes retrieved successfully.",
+        perfumeNotes: structuredPerfumeNotes,
+      },
+    };
+  } catch (error) {
+    console.error("Error in getAllPerfumeNotes service:", error);
+    return {
+      status: 500,
+      data: {
+        message: "An error occurred while fetching perfume notes.",
+      },
+    };
+  }
+};
+
+const getPerfumeNoteById = async ({ id }) => {
+  try {
+    const perfumeNotes = await PerfumeNote.findAll({
+      where: { perfumeId: id },
+      include: [
+        {
+          model: Perfume,
+          attributes: ["id", "name"],
+        },
+        {
+          model: Note,
+          attributes: ["id", "name"],
+        },
+      ],
+      attributes: ["noteType"],
+    });
+
+    if (!perfumeNotes || perfumeNotes.length === 0) {
+      return {
+        status: 404,
+        data: {
+          message: `No perfume notes found for perfume ID ${id}.`,
+        },
+      };
+    }
+
+    const perfumeResponse = {
+      Perfume: {
+        id: perfumeNotes[0].Perfume.id,
+        name: perfumeNotes[0].Perfume.name,
+      },
+      TopNotes: [],
+      MiddleNotes: [],
+      BaseNotes: [],
+    };
+
+    perfumeNotes.forEach((note) => {
+      const { noteType, Note } = note;
+
+      if (noteType === "Top") {
+        perfumeResponse.TopNotes.push(Note);
+      } else if (noteType === "Middle") {
+        perfumeResponse.MiddleNotes.push(Note);
+      } else if (noteType === "Base") {
+        perfumeResponse.BaseNotes.push(Note);
+      }
+    });
+
+    return {
+      status: 200,
+      data: {
+        message: `Perfume notes for perfume ID ${id} retrieved successfully.`,
+        perfume: perfumeResponse,
+      },
+    };
+  } catch (error) {
+    console.error(
+      `Error in getPerfumeNoteById service for perfume ID ${id}:`,
+      error
+    );
+    return {
+      status: 500,
+      data: {
+        message: `An error occurred while fetching perfume notes for perfume ID ${id}.`,
+      },
+    };
+  }
+};
+
+module.exports = { addPerfumeNotes, getAllPerfumeNotes, getPerfumeNoteById };
