@@ -19,7 +19,7 @@ const addPerfumeNotes = async ({ perfumeId, noteIds, noteType }) => {
         return {
           status: 404,
           data: {
-            message: `Note with ID ${noteId} does not exist.`,
+            message: "Note with ID does not exist.",
           },
         };
       }
@@ -150,7 +150,7 @@ const getPerfumeNoteById = async ({ id }) => {
       return {
         status: 404,
         data: {
-          message: `No perfume notes found for perfume ID ${id}.`,
+          message: "No perfume notes found.",
         },
       };
     }
@@ -180,19 +180,16 @@ const getPerfumeNoteById = async ({ id }) => {
     return {
       status: 200,
       data: {
-        message: `Perfume notes for perfume ID ${id} retrieved successfully.`,
+        message: "Perfume notes retrieved successfully.",
         perfume: perfumeResponse,
       },
     };
   } catch (error) {
-    console.error(
-      `Error in getPerfumeNoteById service for perfume ID ${id}:`,
-      error
-    );
+    console.error("Error in getPerfumeNoteById service:", error);
     return {
       status: 500,
       data: {
-        message: `An error occurred while fetching perfume notes for perfume ID ${id}.`,
+        message: "An error occurred while fetching perfume notes.",
       },
     };
   }

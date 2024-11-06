@@ -73,4 +73,69 @@ const addPerfume = async ({
   }
 };
 
-module.exports = { addPerfume };
+const getAllPerfumes = async () => {
+  try {
+    const perfumes = await Perfume.findAll({
+      include: {
+        model: Brand,
+        attributes: ["name"],
+      },
+    });
+
+    if (perfumes.length === 0) {
+      return {
+        status: 404,
+        data: { message: "No perfumes found." },
+      };
+    }
+
+    return {
+      status: 200,
+      data: {
+        message: "All perfumes fetched successfully.",
+        perfumes: perfumes,
+      },
+    };
+  } catch (error) {
+    console.error("Error in getAllPerfumes service:", error);
+    throw {
+      status: 500,
+      message: "Error retrieving all perfumes",
+    };
+  }
+};
+
+const getPerfumeById = async ({ id }) => {
+  try {
+    const perfume = await Perfume.findOne({
+      where: { id },
+      include: {
+        model: Brand,
+        attributes: ["name"],
+      },
+    });
+
+    if (!perfume) {
+      return {
+        status: 404,
+        data: { message: "Perfume not found." },
+      };
+    }
+
+    return {
+      status: 200,
+      data: {
+        message: "Perfume fetched successfully.",
+        perfume: perfume,
+      },
+    };
+  } catch (error) {
+    console.error("Error in getPerfumeById service:", error);
+    throw {
+      status: 500,
+      message: "Error retrieving perfume by ID",
+    };
+  }
+};
+
+module.exports = { addPerfume, getAllPerfumes, getPerfumeById };

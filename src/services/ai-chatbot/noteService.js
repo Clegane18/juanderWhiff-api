@@ -75,7 +75,7 @@ const getNoteById = async ({ id }) => {
     if (!note) {
       return {
         status: 404,
-        data: { message: `Note with id ${id} not found.` },
+        data: { message: "Note not found." },
       };
     }
 

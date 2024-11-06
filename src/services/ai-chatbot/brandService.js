@@ -113,7 +113,7 @@ const getBrandsByOwnerId = async ({ id }) => {
       return {
         status: 404,
         data: {
-          message: `Owner with ID ${id} was not found.`,
+          message: "Owner was not found.",
         },
       };
     }
@@ -134,7 +134,7 @@ const getBrandsByOwnerId = async ({ id }) => {
       return {
         status: 404,
         data: {
-          message: `Owner with ID ${id} exists but has no brands yet.`,
+          message: "Owner exists but has no brands yet.",
         },
       };
     }

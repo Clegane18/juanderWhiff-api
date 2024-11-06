@@ -14,7 +14,7 @@ const compareOgAndLocalPerfumes = async ({
       return {
         status: 404,
         data: {
-          message: `Local perfume with ID of ${noteId} was not found.`,
+          message: "Local perfume was not found.",
         },
       };
     }
@@ -25,7 +25,7 @@ const compareOgAndLocalPerfumes = async ({
       return {
         status: 404,
         data: {
-          message: `OG perfume with ID of ${noteId} was not found.`,
+          message: "OG perfume was not found.",
         },
       };
     }
@@ -134,7 +134,7 @@ const getComparisonByID = async ({ id }) => {
       return {
         status: 404,
         data: {
-          message: `Comparison with ID ${id} not found.`,
+          message: "Comparison not found.",
         },
       };
     }
@@ -147,7 +147,7 @@ const getComparisonByID = async ({ id }) => {
       },
     };
   } catch (error) {
-    console.error(`Error fetching comparison with ID ${id}:`, error);
+    console.error("Error fetching comparison:", error);
     return {
       status: 500,
       data: {

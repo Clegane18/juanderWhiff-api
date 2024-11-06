@@ -77,7 +77,7 @@ const getOwnerById = async ({ id }) => {
     if (!owner) {
       return {
         status: 404,
-        data: { message: `Owner with id ${id} not found.` },
+        data: { message: "Owner not found." },
       };
     }
 
