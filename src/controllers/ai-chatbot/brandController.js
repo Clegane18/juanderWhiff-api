@@ -24,4 +24,16 @@ const getBrandsByOwnerId = async (req, res) => {
   return res.status(result.status).json(result.data);
 };
 
-module.exports = { addBrand, getAllBrand, getBrandsByOwnerId };
+const updateBrandId = async (req, res) => {
+  const result = await brandService.updateBrandId({
+    brandId: req.params.brandId,
+    name: req.body.name,
+    country: req.body.country,
+    description: req.body.description,
+    website: req.body.website,
+    logoUrl: req.body.logoUrl,
+  });
+  return res.status(result.status).json(result.data);
+};
+
+module.exports = { addBrand, getAllBrand, getBrandsByOwnerId, updateBrandId };

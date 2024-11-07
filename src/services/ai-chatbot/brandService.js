@@ -153,4 +153,55 @@ const getBrandsByOwnerId = async ({ id }) => {
   }
 };
 
-module.exports = { addBrand, getAllBrand, getBrandsByOwnerId };
+const updateBrandId = async ({
+  brandId,
+  name,
+  country,
+  description,
+  website,
+  logoUrl,
+}) => {
+  try {
+    const brand = await Brand.findByPk(brandId);
+
+    if (!brand) {
+      return {
+        status: 404,
+        data: { message: "Brand not found." },
+      };
+    }
+
+    const fields = { name, country, description, website, logoUrl };
+    const updates = Object.keys(fields).reduce((acc, key) => {
+      if (fields[key] !== undefined && fields[key] !== null) {
+        acc[key] = fields[key].trim();
+      }
+      return acc;
+    }, {});
+
+    if (Object.keys(updates).length === 0) {
+      return {
+        status: 400,
+        data: { message: "No updates provided." },
+      };
+    }
+
+    await brand.update(updates);
+
+    return {
+      status: 200,
+      data: {
+        message: "Brand updated successfully",
+        updatedInfo: brand,
+      },
+    };
+  } catch (error) {
+    console.error("Error in updateBrandId service:", error);
+    return {
+      status: 500,
+      data: { message: "An error occurred while updating the brand by ID." },
+    };
+  }
+};
+
+module.exports = { addBrand, getAllBrand, getBrandsByOwnerId, updateBrandId };

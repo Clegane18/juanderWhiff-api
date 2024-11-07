@@ -100,6 +100,26 @@ const validateID = (req, res, next) => {
 
   next();
 };
+
+const validateUpdateBrand = (req, res, next) => {
+  const dataToValidate = {
+    brandId: req.params.brandId,
+    ...req.body,
+  };
+
+  const { error } = updateBrandSchema.validate(dataToValidate, {
+    abortEarly: false,
+  });
+
+  if (error) {
+    return res.status(400).json({
+      error: error.details.map((detail) => detail.message).join(", "),
+    });
+  }
+
+  next();
+};
+
 // Schemas
 const createPerfumeSchema = Joi.object({
   brandId: Joi.number().integer().required().messages({
@@ -265,6 +285,41 @@ const validateIDSchema = Joi.object({
   }),
 });
 
+const updateBrandSchema = Joi.object({
+  brandId: Joi.number().integer().required().messages({
+    "number.base": "Brand ID must be a number.",
+    "any.required": "Brand ID is required.",
+  }),
+  name: Joi.string().trim().min(3).max(100).messages({
+    "string.base": "Name must be a string.",
+    "string.empty": "Name cannot be empty.",
+    "string.min": "Name must be at least 3 characters long.",
+    "string.max": "Name must not exceed 100 characters.",
+    "any.required": "Name is required.",
+  }),
+  country: Joi.string().trim().min(2).max(50).messages({
+    "string.base": "Country must be a string.",
+    "string.empty": "Country cannot be empty.",
+    "string.min": "Country must be at least 2 characters long.",
+    "string.max": "Country must not exceed 50 characters.",
+    "any.required": "Country is required.",
+  }),
+  description: Joi.string().trim().min(10).allow("").optional().messages({
+    "string.base": "Description must be a string.",
+    "string.min": "Description must be at least 10 characters long.",
+    "string.empty":
+      "Description can be empty but if provided must be at least 10 characters.",
+  }),
+  website: Joi.string().uri().allow("").optional().messages({
+    "string.base": "Website must be a string.",
+    "string.uri": "Website must be a valid URL.",
+  }),
+  logoUrl: Joi.string().uri().allow("").optional().messages({
+    "string.base": "Logo URL must be a string.",
+    "string.uri": "Logo URL must be a valid URL.",
+  }),
+});
+
 module.exports = {
   validateAddPerfume,
   validateAddOwner,
@@ -273,4 +328,5 @@ module.exports = {
   validateAddPerfumeNote,
   validateComparePerfumes,
   validateID,
+  validateUpdateBrand,
 };
