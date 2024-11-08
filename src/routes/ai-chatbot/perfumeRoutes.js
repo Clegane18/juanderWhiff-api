@@ -4,6 +4,7 @@ const perfumeController = require("../../controllers/ai-chatbot/perfumeControlle
 const {
   validateAddPerfume,
   validateID,
+  validateUpdatePerfume,
 } = require("../../middlewares/validators/aiChatbotValidators");
 
 router.post("/", validateAddPerfume, perfumeController.addPerfume);
@@ -11,5 +12,11 @@ router.post("/", validateAddPerfume, perfumeController.addPerfume);
 router.get("/", perfumeController.getAllPerfumes);
 
 router.get("/:id", validateID, perfumeController.getPerfumeById);
+
+router.put(
+  "/:perfumeId",
+  validateUpdatePerfume,
+  perfumeController.updatePerfume
+);
 
 module.exports = router;

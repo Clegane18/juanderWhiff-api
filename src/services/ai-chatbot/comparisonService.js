@@ -157,8 +157,72 @@ const getComparisonByID = async ({ id }) => {
   }
 };
 
+const updateComparison = async ({
+  comparisonId,
+  originalPerfumeId,
+  comparisonDescription,
+  similarityScore,
+}) => {
+  try {
+    const comparison = await Comparison.findByPk(comparisonId);
+
+    if (!comparison) {
+      return {
+        status: 404,
+        data: { message: "Comparison not found." },
+      };
+    }
+    if (originalPerfumeId !== undefined && originalPerfumeId !== null) {
+      const originalPerfume = await Perfume.findByPk(originalPerfumeId);
+      if (!originalPerfume) {
+        return {
+          status: 404,
+          data: { message: "Original perfume not found." },
+        };
+      }
+    }
+
+    const fields = {
+      originalPerfumeId,
+      comparisonDescription,
+      similarityScore,
+    };
+    const updates = Object.keys(fields).reduce((acc, key) => {
+      if (fields[key] !== undefined && fields[key] !== null) {
+        acc[key] =
+          typeof fields[key] === "string" ? fields[key].trim() : fields[key];
+      }
+      return acc;
+    }, {});
+
+    if (Object.keys(updates).length === 0) {
+      return {
+        status: 400,
+        data: { message: "No updates provided." },
+      };
+    }
+
+    await comparison.update(updates);
+
+    return {
+      status: 200,
+      data: {
+        message: "Comparison updated successfully",
+        updatedInfo: comparison,
+      },
+    };
+  } catch (error) {
+    console.error("Error in updateComparison service:", error);
+    return {
+      status: 500,
+      data: { message: "An error occurred while updating the comparison." },
+    };
+  }
+};
+
 module.exports = {
   compareOgAndLocalPerfumes,
   getAllComparisons,
   getComparisonByID,
+  updateComparison,
 };

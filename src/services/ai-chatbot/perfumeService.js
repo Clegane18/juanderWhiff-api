@@ -138,4 +138,106 @@ const getPerfumeById = async ({ id }) => {
   }
 };
 
-module.exports = { addPerfume, getAllPerfumes, getPerfumeById };
+const updatePerfume = async ({
+  perfumeId,
+  brandId,
+  originalPerfumeId,
+  name,
+  type,
+  description,
+  price,
+  size,
+  smellDescription,
+  releaseDate,
+  comparisonDescription,
+  similarityScore,
+  oilConcentration,
+}) => {
+  try {
+    const perfume = await Perfume.findByPk(perfumeId);
+
+    if (!perfume) {
+      return {
+        status: 404,
+        data: { message: "Perfume not found." },
+      };
+    }
+
+    if (brandId !== undefined && brandId !== null) {
+      const brandExists = await Brand.findByPk(brandId);
+      if (!brandExists) {
+        return {
+          status: 400,
+          data: { message: "Brand does not exist." },
+        };
+      }
+    }
+
+    if (originalPerfumeId !== undefined && originalPerfumeId !== null) {
+      const originalPerfume = await Perfume.findByPk(originalPerfumeId);
+      if (!originalPerfume) {
+        return {
+          status: 400,
+          data: { message: "Original perfume does not exist." },
+        };
+      }
+
+      if (originalPerfume.type !== "OG") {
+        return {
+          status: 400,
+          data: {
+            message: "Original perfume must be of type 'og' (original).",
+          },
+        };
+      }
+    }
+
+    const fields = {
+      brandId,
+      originalPerfumeId,
+      name,
+      type,
+      description,
+      price,
+      size,
+      smellDescription,
+      releaseDate,
+      comparisonDescription,
+      similarityScore,
+      oilConcentration,
+    };
+
+    const updates = Object.keys(fields).reduce((acc, key) => {
+      if (fields[key] !== undefined && fields[key] !== null) {
+        acc[key] =
+          typeof fields[key] === "string" ? fields[key].trim() : fields[key];
+      }
+      return acc;
+    }, {});
+
+    if (Object.keys(updates).length === 0) {
+      return {
+        status: 400,
+        data: { message: "No updates provided." },
+      };
+    }
+
+    await perfume.update(updates);
+
+    return {
+      status: 200,
+      data: {
+        message: "Perfume updated successfully",
+        updatedPerfume: perfume,
+      },
+    };
+  } catch (error) {
+    console.error("Error in updatePerfume service:", error);
+    return {
+      status: 500,
+      data: { message: "An error occurred while updating the perfume." },
+    };
+  }
+};
+
+module.exports = { addPerfume, getAllPerfumes, getPerfumeById, updatePerfume };

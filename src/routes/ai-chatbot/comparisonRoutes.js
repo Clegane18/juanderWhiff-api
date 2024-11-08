@@ -4,6 +4,7 @@ const comparisonController = require("../../controllers/ai-chatbot/comparisonCon
 const {
   validateComparePerfumes,
   validateID,
+  validateComparisonBrand,
 } = require("../../middlewares/validators/aiChatbotValidators");
 
 router.post(
@@ -15,5 +16,11 @@ router.post(
 router.get("/", comparisonController.getAllComparisons);
 
 router.get("/:id", validateID, comparisonController.getComparisonByID);
+
+router.put(
+  "/:comparisonId",
+  validateComparisonBrand,
+  comparisonController.updateComparison
+);
 
 module.exports = router;

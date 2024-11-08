@@ -21,8 +21,19 @@ const getComparisonByID = async (req, res) => {
   return res.status(result.status).json(result.data);
 };
 
+const updateComparison = async (req, res) => {
+  const result = await comparisonService.updateComparison({
+    comparisonId: req.params.comparisonId,
+    originalPerfumeId: req.body.originalPerfumeId,
+    comparisonDescription: req.body.comparisonDescription,
+    similarityScore: req.body.similarityScore,
+  });
+  return res.status(result.status).json(result.data);
+};
+
 module.exports = {
   compareOgAndLocalPerfumes,
   getAllComparisons,
   getComparisonByID,
+  updateComparison,
 };

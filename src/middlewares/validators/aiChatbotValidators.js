@@ -120,6 +120,43 @@ const validateUpdateBrand = (req, res, next) => {
   next();
 };
 
+const validateComparisonBrand = (req, res, next) => {
+  const dataToValidate = {
+    comparisonId: req.params.comparisonId,
+    ...req.body,
+  };
+
+  const { error } = updateComparisonSchema.validate(dataToValidate, {
+    abortEarly: false,
+  });
+
+  if (error) {
+    return res.status(400).json({
+      error: error.details.map((detail) => detail.message).join(", "),
+    });
+  }
+
+  next();
+};
+
+const validateUpdatePerfume = (req, res, next) => {
+  const dataToValidate = {
+    perfumeId: req.params.perfumeId,
+    ...req.body,
+  };
+
+  const { error } = updatePerfumeSchema.validate(dataToValidate, {
+    abortEarly: false,
+  });
+
+  if (error) {
+    return res.status(400).json({
+      error: error.details.map((detail) => detail.message).join(", "),
+    });
+  }
+
+  next();
+};
 // Schemas
 const createPerfumeSchema = Joi.object({
   brandId: Joi.number().integer().required().messages({
@@ -320,6 +357,83 @@ const updateBrandSchema = Joi.object({
   }),
 });
 
+const updateComparisonSchema = Joi.object({
+  comparisonId: Joi.number().integer().required().messages({
+    "number.base": "Comparison ID must be a number.",
+    "any.required": "Comparison ID is required.",
+  }),
+  originalPerfumeId: Joi.number().integer().messages({
+    "number.base": "Original ID must be a number.",
+    "any.required": "Original ID is required.",
+  }),
+  comparisonDescription: Joi.string().messages({
+    "string.base": "Comparison description must be a string.",
+    "any.required": "Comparison description is required.",
+  }),
+});
+
+const updatePerfumeSchema = Joi.object({
+  perfumeId: Joi.number().integer().required().messages({
+    "number.base": "Perfume ID must be a number.",
+    "number.integer": "Perfume ID must be an integer.",
+    "any.required": "Perfume ID is a required field.",
+  }),
+  brandId: Joi.number().integer().messages({
+    "number.base": "Brand ID must be a number.",
+    "number.integer": "Brand ID must be an integer.",
+  }),
+  originalPerfumeId: Joi.number().integer().allow(null).messages({
+    "number.base": "Original Perfume ID must be a number.",
+    "number.integer": "Original Perfume ID must be an integer.",
+  }),
+  name: Joi.string().messages({
+    "string.base": "Name must be a string.",
+  }),
+  type: Joi.string().valid("OG", "Local").messages({
+    "string.base": "Type must be a string.",
+    "any.only": 'Type must be either "OG" or "Local".',
+  }),
+  description: Joi.string().allow(null).messages({
+    "string.base": "Description must be a string.",
+  }),
+  price: Joi.number().allow(null).precision(2).optional().messages({
+    "number.base": "Price must be a number.",
+    "number.precision": "Price must have at most 2 decimal places.",
+  }),
+  size: Joi.string().allow(null).messages({
+    "string.base": "Size must be a string.",
+  }),
+  smellDescription: Joi.string().allow(null).messages({
+    "string.base": "Smell Description must be a string.",
+  }),
+  releaseDate: Joi.date().iso().allow(null).messages({
+    "date.base": "Release Date must be a valid date.",
+    "date.format": "Release Date must be in ISO format.",
+  }),
+  comparisonDescription: Joi.string().allow(null).messages({
+    "string.base": "Comparison Description must be a string.",
+  }),
+  similarityScore: Joi.number().min(0).max(100).allow(null).messages({
+    "number.base": "Similarity Score must be a number.",
+    "number.min": "Similarity Score must be at least 0.",
+    "number.max": "Similarity Score must be at most 100.",
+  }),
+  oilConcentration: Joi.string()
+    .valid(
+      "Extrait De Parfum",
+      "Eau De Parfum",
+      "Eau De Toilette",
+      "Eau De Cologne"
+    )
+    .required()
+    .messages({
+      "string.base": "Oil Concentration must be a text string.",
+      "any.only":
+        "Oil Concentration must be one of the following: Extrait De Parfum, Eau De Parfum, Eau De Toilette, Eau De Cologne.",
+      "any.required": "Oil Concentration is a required field.",
+    }),
+});
+
 module.exports = {
   validateAddPerfume,
   validateAddOwner,
@@ -329,4 +443,6 @@ module.exports = {
   validateComparePerfumes,
   validateID,
   validateUpdateBrand,
+  validateComparisonBrand,
+  validateUpdatePerfume,
 };
