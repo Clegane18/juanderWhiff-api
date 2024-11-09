@@ -97,4 +97,45 @@ const getOwnerById = async ({ id }) => {
   }
 };
 
-module.exports = { addOwner, getAllOwners, getOwnerById };
+const updateOwnerById = async ({ ownerId, name, bio }) => {
+  try {
+    const owner = await Owner.findByPk(ownerId);
+
+    if (!owner) {
+      return {
+        status: 404,
+        data: { message: "Owner not found." },
+      };
+    }
+
+    const fields = { name, bio };
+    const updates = Object.keys(fields).reduce((acc, key) => {
+      if (fields[key] !== undefined && fields[key] !== null) {
+        acc[key] =
+          typeof fields[key] === "string" ? fields[key].trim() : fields[key];
+      }
+      return acc;
+    }, {});
+
+    if (Object.keys(updates).length === 0) {
+      return {
+        status: 400,
+        data: { message: "No updates provided." },
+      };
+    }
+
+    await owner.update(updates);
+
+    return {
+      status: 200,
+      data: { message: "Owner updated successfully.", updatedInfo: owner },
+    };
+  } catch (error) {
+    return {
+      status: 500,
+      data: { message: "An error occurred while updating the owner.", error },
+    };
+  }
+};
+
+module.exports = { addOwner, getAllOwners, getOwnerById, updateOwnerById };

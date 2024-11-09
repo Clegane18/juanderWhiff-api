@@ -1,4 +1,5 @@
 const Joi = require("joi");
+const { updateOwnerById } = require("../../services/ai-chatbot/ownerService");
 
 const validateAddPerfume = (req, res, next) => {
   const { error } = createPerfumeSchema.validate(req.body, {
@@ -146,6 +147,25 @@ const validateUpdatePerfume = (req, res, next) => {
   };
 
   const { error } = updatePerfumeSchema.validate(dataToValidate, {
+    abortEarly: false,
+  });
+
+  if (error) {
+    return res.status(400).json({
+      error: error.details.map((detail) => detail.message).join(", "),
+    });
+  }
+
+  next();
+};
+
+const validateUpdateOwner = (req, res, next) => {
+  const dataToValidate = {
+    ownerId: req.params.ownerId,
+    ...req.body,
+  };
+
+  const { error } = updateOwnerSchema.validate(dataToValidate, {
     abortEarly: false,
   });
 
@@ -434,6 +454,25 @@ const updatePerfumeSchema = Joi.object({
     }),
 });
 
+const updateOwnerSchema = Joi.object({
+  ownerId: Joi.number().integer().required().messages({
+    "number.base": "Owner ID must be a number.",
+    "number.integer": "Owner ID must be an integer.",
+    "any.required": "Owner ID is a required field.",
+  }),
+  name: Joi.string().trim().min(3).messages({
+    "string.base": "Name must be a string.",
+    "string.empty": "Name cannot be empty.",
+    "string.min": "Name must be at least 3 characters long.",
+  }),
+  bio: Joi.string().trim().min(10).allow("").optional().messages({
+    "string.base": "Bio must be a string.",
+    "string.min": "Bio must be at least 10 characters long.",
+    "string.empty":
+      "Bio can be empty but if provided must be at least 10 characters.",
+  }),
+});
+
 module.exports = {
   validateAddPerfume,
   validateAddOwner,
@@ -445,4 +484,5 @@ module.exports = {
   validateUpdateBrand,
   validateComparisonBrand,
   validateUpdatePerfume,
+  validateUpdateOwner,
 };
