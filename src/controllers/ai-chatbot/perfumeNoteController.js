@@ -21,4 +21,18 @@ const getPerfumeNoteById = async (req, res) => {
   return res.status(result.status).json(result.data);
 };
 
-module.exports = { addPerfumeNotes, getAllPerfumeNotes, getPerfumeNoteById };
+const updatePerfumeNotes = async (req, res) => {
+  const result = await perfumeNoteService.updatePerfumeNotes({
+    perfumeId: req.params.perfumeId,
+    noteIds: req.body.noteIds,
+    noteType: req.body.noteType,
+  });
+  return res.status(result.status).json(result.data);
+};
+
+module.exports = {
+  addPerfumeNotes,
+  getAllPerfumeNotes,
+  getPerfumeNoteById,
+  updatePerfumeNotes,
+};

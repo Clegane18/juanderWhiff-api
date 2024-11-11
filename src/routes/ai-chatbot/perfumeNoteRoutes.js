@@ -2,13 +2,13 @@ const express = require("express");
 const router = express.Router();
 const perfumeNoteController = require("../../controllers/ai-chatbot/perfumeNoteController");
 const {
-  validateAddPerfumeNote,
+  validatePerfumeNote,
   validateID,
 } = require("../../middlewares/validators/aiChatbotValidators");
 
 router.post(
   "/:perfumeId",
-  validateAddPerfumeNote,
+  validatePerfumeNote,
   perfumeNoteController.addPerfumeNotes
 );
 
@@ -16,4 +16,9 @@ router.get("/", perfumeNoteController.getAllPerfumeNotes);
 
 router.get("/:id", validateID, perfumeNoteController.getPerfumeNoteById);
 
+router.put(
+  "/:perfumeId",
+  validatePerfumeNote,
+  perfumeNoteController.updatePerfumeNotes
+);
 module.exports = router;

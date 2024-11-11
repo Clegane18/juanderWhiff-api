@@ -195,4 +195,83 @@ const getPerfumeNoteById = async ({ id }) => {
   }
 };
 
-module.exports = { addPerfumeNotes, getAllPerfumeNotes, getPerfumeNoteById };
+const updatePerfumeNotes = async ({ perfumeId, noteIds, noteType }) => {
+  try {
+    const existingPerfume = await Perfume.findByPk(perfumeId);
+    if (!existingPerfume) {
+      return {
+        status: 404,
+        data: { message: "Perfume does not exist." },
+      };
+    }
+
+    const existingPerfumeNotes = await PerfumeNote.findAll({
+      where: { perfumeId },
+    });
+    const existingNoteIds = existingPerfumeNotes.map((note) => note.noteId);
+
+    const notesToRemove = existingPerfumeNotes.filter(
+      (note) => !noteIds.includes(note.noteId)
+    );
+    const notesToAddOrUpdate = noteIds.filter(
+      (noteId) => !existingNoteIds.includes(noteId)
+    );
+
+    for (const note of notesToRemove) {
+      await note.destroy();
+    }
+
+    const updatedNotes = [];
+
+    for (const noteId of noteIds) {
+      const existingNote = await Note.findByPk(noteId);
+      if (!existingNote) {
+        return {
+          status: 404,
+          data: { message: `Note with ID ${noteId} does not exist.` },
+        };
+      }
+
+      if (existingNoteIds.includes(noteId)) {
+        const existingPerfumeNote = await PerfumeNote.findOne({
+          where: { perfumeId, noteId },
+        });
+
+        if (existingPerfumeNote && existingPerfumeNote.noteType !== noteType) {
+          await existingPerfumeNote.update({ noteType });
+          updatedNotes.push(existingPerfumeNote);
+        }
+      }
+
+      if (notesToAddOrUpdate.includes(noteId)) {
+        const newPerfumeNote = await PerfumeNote.create({
+          perfumeId,
+          noteId,
+          noteType,
+        });
+        updatedNotes.push(newPerfumeNote);
+      }
+    }
+
+    return {
+      status: 200,
+      data: {
+        message: "Perfume notes updated successfully.",
+        updateNotes: updatedNotes,
+      },
+    };
+  } catch (error) {
+    console.error("Error in updatePerfumeNotes service:", error);
+    return {
+      status: 500,
+      data: { message: "Failed to update perfume notes." },
+    };
+  }
+};
+
+module.exports = {
+  addPerfumeNotes,
+  getAllPerfumeNotes,
+  getPerfumeNoteById,
+  updatePerfumeNotes,
+};

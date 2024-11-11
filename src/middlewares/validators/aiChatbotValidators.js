@@ -51,13 +51,13 @@ const validateAddNote = (req, res, next) => {
   next();
 };
 
-const validateAddPerfumeNote = (req, res, next) => {
+const validatePerfumeNote = (req, res, next) => {
   const dataToValidate = {
     perfumeId: req.params.perfumeId,
     ...req.body,
   };
 
-  const { error } = addPerfumeNoteSchema.validate(dataToValidate, {
+  const { error } = validatePerfumeNoteSchema.validate(dataToValidate, {
     abortEarly: false,
   });
 
@@ -177,6 +177,7 @@ const validateUpdateOwner = (req, res, next) => {
 
   next();
 };
+
 // Schemas
 const createPerfumeSchema = Joi.object({
   brandId: Joi.number().integer().required().messages({
@@ -298,7 +299,7 @@ const addNoteSchema = Joi.object({
   }),
 });
 
-const addPerfumeNoteSchema = Joi.object({
+const validatePerfumeNoteSchema = Joi.object({
   perfumeId: Joi.number().integer().required().messages({
     "number.base": "Perfume ID must be a number.",
     "any.required": "Perfume ID is required.",
@@ -478,7 +479,7 @@ module.exports = {
   validateAddOwner,
   validateAddBrand,
   validateAddNote,
-  validateAddPerfumeNote,
+  validatePerfumeNote,
   validateComparePerfumes,
   validateID,
   validateUpdateBrand,
