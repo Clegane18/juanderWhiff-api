@@ -15,4 +15,6 @@ router.get("/:id", validateID, brandController.getBrandsByOwnerId);
 
 router.put("/:brandId", validateUpdateBrand, brandController.updateBrandId);
 
+router.delete("/:id", validateID, brandController.deleteBrandById);
+
 module.exports = router;

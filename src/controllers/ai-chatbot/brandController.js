@@ -36,4 +36,17 @@ const updateBrandId = async (req, res) => {
   return res.status(result.status).json(result.data);
 };
 
-module.exports = { addBrand, getAllBrand, getBrandsByOwnerId, updateBrandId };
+const deleteBrandById = async (req, res) => {
+  const result = await brandService.deleteBrandById({
+    id: req.params.id,
+  });
+  return res.status(result.status).json(result.data);
+};
+
+module.exports = {
+  addBrand,
+  getAllBrand,
+  getBrandsByOwnerId,
+  updateBrandId,
+  deleteBrandById,
+};

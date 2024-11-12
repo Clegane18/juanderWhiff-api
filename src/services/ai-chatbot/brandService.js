@@ -204,4 +204,38 @@ const updateBrandId = async ({
   }
 };
 
-module.exports = { addBrand, getAllBrand, getBrandsByOwnerId, updateBrandId };
+const deleteBrandById = async ({ id }) => {
+  try {
+    const brand = await Brand.findByPk(id);
+
+    if (!brand) {
+      return {
+        status: 404,
+        data: {
+          message: "Brand not found.",
+        },
+      };
+    }
+
+    await brand.destroy();
+
+    return {
+      status: 200,
+      message: "Brand deleted successfully.",
+    };
+  } catch (error) {
+    console.error("Error in deleteBrandById service:", error);
+    throw {
+      status: 500,
+      message: "Error deleting brand by ID",
+    };
+  }
+};
+
+module.exports = {
+  addBrand,
+  getAllBrand,
+  getBrandsByOwnerId,
+  updateBrandId,
+  deleteBrandById,
+};
