@@ -1,4 +1,4 @@
-const { Brand, Owner } = require("../../database/models/index");
+const { Brand, Owner, Perfume } = require("../../database/models/index");
 const { normalizeTexts } = require("../../utils/normalize");
 
 const addBrand = async ({
@@ -206,6 +206,20 @@ const updateBrandId = async ({
 
 const deleteBrandById = async ({ id }) => {
   try {
+    const relatedPerfumes = await Perfume.findAll({
+      where: { id },
+    });
+
+    if (relatedPerfumes.length > 0) {
+      return {
+        status: 400,
+        data: {
+          message:
+            "This brand has associated perfumes. Delete the perfume(s) first.",
+        },
+      };
+    }
+
     const brand = await Brand.findByPk(id);
 
     if (!brand) {
