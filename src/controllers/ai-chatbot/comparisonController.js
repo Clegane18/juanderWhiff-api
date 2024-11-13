@@ -23,10 +23,17 @@ const getComparisonByID = async (req, res) => {
 
 const updateComparison = async (req, res) => {
   const result = await comparisonService.updateComparison({
-    comparisonId: req.params.comparisonId,
+    id: req.params.id,
     originalPerfumeId: req.body.originalPerfumeId,
     comparisonDescription: req.body.comparisonDescription,
     similarityScore: req.body.similarityScore,
+  });
+  return res.status(result.status).json(result.data);
+};
+
+const deleteComparisonById = async (req, res) => {
+  const result = await comparisonService.deleteComparisonById({
+    id: req.params.id,
   });
   return res.status(result.status).json(result.data);
 };
@@ -36,4 +43,5 @@ module.exports = {
   getAllComparisons,
   getComparisonByID,
   updateComparison,
+  deleteComparisonById,
 };

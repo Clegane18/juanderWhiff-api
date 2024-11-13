@@ -7,20 +7,19 @@ const {
   validateComparisonBrand,
 } = require("../../middlewares/validators/aiChatbotValidators");
 
-router.post(
-  "/",
-  validateComparePerfumes,
-  comparisonController.compareOgAndLocalPerfumes
-);
+router
+  .post(
+    "/",
+    validateComparePerfumes,
+    comparisonController.compareOgAndLocalPerfumes
+  )
+  .get("/", comparisonController.getAllComparisons);
 
-router.get("/", comparisonController.getAllComparisons);
+router
+  .get("/:id", validateID, comparisonController.getComparisonByID)
 
-router.get("/:id", validateID, comparisonController.getComparisonByID);
+  .put("/:id", validateComparisonBrand, comparisonController.updateComparison)
 
-router.put(
-  "/:comparisonId",
-  validateComparisonBrand,
-  comparisonController.updateComparison
-);
+  .delete("/:id", validateID, comparisonController.deleteComparisonById);
 
 module.exports = router;

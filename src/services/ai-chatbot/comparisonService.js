@@ -158,13 +158,13 @@ const getComparisonByID = async ({ id }) => {
 };
 
 const updateComparison = async ({
-  comparisonId,
+  id,
   originalPerfumeId,
   comparisonDescription,
   similarityScore,
 }) => {
   try {
-    const comparison = await Comparison.findByPk(comparisonId);
+    const comparison = await Comparison.findByPk(id);
 
     if (!comparison) {
       return {
@@ -220,9 +220,48 @@ const updateComparison = async ({
   }
 };
 
+const deleteComparisonById = async ({ id }) => {
+  try {
+    const comparison = await Comparison.findByPk(id, {
+      include: [
+        { model: Perfume, as: "Perfume" },
+        { model: Perfume, as: "OriginalPerfume" },
+      ],
+    });
+
+    if (!comparison) {
+      return {
+        status: 404,
+        data: { message: "Comparison not found" },
+      };
+    }
+
+    if (comparison.Perfume || comparison.OriginalPerfume) {
+      return {
+        status: 400,
+        data: { message: "Cannot delete comparison with linked perfumes" },
+      };
+    }
+
+    await comparison.destroy();
+
+    return {
+      status: 200,
+      data: { message: "Comparison deleted successfully" },
+    };
+  } catch (error) {
+    console.error("Error deleting comparison:", error);
+    return {
+      status: 500,
+      data: { message: "An error occurred while deleting the comparison" },
+    };
+  }
+};
+
 module.exports = {
   compareOgAndLocalPerfumes,
   getAllComparisons,
   getComparisonByID,
   updateComparison,
+  deleteComparisonById,
 };

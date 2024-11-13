@@ -123,7 +123,7 @@ const validateUpdateBrand = (req, res, next) => {
 
 const validateComparisonBrand = (req, res, next) => {
   const dataToValidate = {
-    comparisonId: req.params.comparisonId,
+    id: req.params.id,
     ...req.body,
   };
 
@@ -379,7 +379,7 @@ const updateBrandSchema = Joi.object({
 });
 
 const updateComparisonSchema = Joi.object({
-  comparisonId: Joi.number().integer().required().messages({
+  id: Joi.number().integer().required().messages({
     "number.base": "Comparison ID must be a number.",
     "any.required": "Comparison ID is required.",
   }),
