@@ -7,14 +7,12 @@ const {
   validateUpdateBrand,
 } = require("../../middlewares/validators/aiChatbotValidators");
 
-router.post("/:ownerId", validateAddBrand, brandController.addBrand);
-
 router.get("/", brandController.getAllBrand);
 
-router.get("/:id", validateID, brandController.getBrandsByOwnerId);
-
-router.put("/:brandId", validateUpdateBrand, brandController.updateBrandId);
-
-router.delete("/:id", validateID, brandController.deleteBrandById);
+router
+  .post("/:id", validateAddBrand, brandController.addBrand)
+  .get("/:id", validateID, brandController.getBrandsByOwnerId)
+  .put("/:id", validateUpdateBrand, brandController.updateBrandId)
+  .delete("/:id", validateID, brandController.deleteBrandById);
 
 module.exports = router;

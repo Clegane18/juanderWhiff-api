@@ -7,16 +7,12 @@ const {
   validateUpdatePerfume,
 } = require("../../middlewares/validators/aiChatbotValidators");
 
-router.post("/", validateAddPerfume, perfumeController.addPerfume);
+router
+  .post("/", validateAddPerfume, perfumeController.addPerfume)
+  .get("/", perfumeController.getAllPerfumes);
 
-router.get("/", perfumeController.getAllPerfumes);
-
-router.get("/:id", validateID, perfumeController.getPerfumeById);
-
-router.put(
-  "/:perfumeId",
-  validateUpdatePerfume,
-  perfumeController.updatePerfume
-);
+router
+  .get("/:id", validateID, perfumeController.getPerfumeById)
+  .put("/:id", validateUpdatePerfume, perfumeController.updatePerfume);
 
 module.exports = router;

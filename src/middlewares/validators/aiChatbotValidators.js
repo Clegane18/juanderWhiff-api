@@ -28,7 +28,14 @@ const validateAddOwner = (req, res, next) => {
 };
 
 const validateAddBrand = (req, res, next) => {
-  const { error } = addBrandSchema.validate(req.body, { abortEarly: false });
+  const dataToValidate = {
+    id: req.params.id,
+    ...req.body,
+  };
+
+  const { error } = addBrandSchema.validate(dataToValidate, {
+    abortEarly: false,
+  });
 
   if (error) {
     return res.status(400).json({
@@ -53,7 +60,7 @@ const validateAddNote = (req, res, next) => {
 
 const validatePerfumeNote = (req, res, next) => {
   const dataToValidate = {
-    perfumeId: req.params.perfumeId,
+    id: req.params.id,
     ...req.body,
   };
 
@@ -104,7 +111,7 @@ const validateID = (req, res, next) => {
 
 const validateUpdateBrand = (req, res, next) => {
   const dataToValidate = {
-    brandId: req.params.brandId,
+    id: req.params.id,
     ...req.body,
   };
 
@@ -142,7 +149,7 @@ const validateComparisonBrand = (req, res, next) => {
 
 const validateUpdatePerfume = (req, res, next) => {
   const dataToValidate = {
-    perfumeId: req.params.perfumeId,
+    id: req.params.id,
     ...req.body,
   };
 
@@ -161,7 +168,7 @@ const validateUpdatePerfume = (req, res, next) => {
 
 const validateUpdateOwner = (req, res, next) => {
   const dataToValidate = {
-    ownerId: req.params.ownerId,
+    id: req.params.id,
     ...req.body,
   };
 
@@ -255,7 +262,7 @@ const createOwnerSchema = Joi.object({
 });
 
 const addBrandSchema = Joi.object({
-  ownerId: Joi.number().integer().required().messages({
+  id: Joi.number().integer().required().messages({
     "number.base": "Owner ID must be a number.",
     "any.required": "Owner ID is required.",
   }),
@@ -300,7 +307,7 @@ const addNoteSchema = Joi.object({
 });
 
 const validatePerfumeNoteSchema = Joi.object({
-  perfumeId: Joi.number().integer().required().messages({
+  id: Joi.number().integer().required().messages({
     "number.base": "Perfume ID must be a number.",
     "any.required": "Perfume ID is required.",
   }),
@@ -344,7 +351,7 @@ const validateIDSchema = Joi.object({
 });
 
 const updateBrandSchema = Joi.object({
-  brandId: Joi.number().integer().required().messages({
+  id: Joi.number().integer().required().messages({
     "number.base": "Brand ID must be a number.",
     "any.required": "Brand ID is required.",
   }),
@@ -394,7 +401,7 @@ const updateComparisonSchema = Joi.object({
 });
 
 const updatePerfumeSchema = Joi.object({
-  perfumeId: Joi.number().integer().required().messages({
+  id: Joi.number().integer().required().messages({
     "number.base": "Perfume ID must be a number.",
     "number.integer": "Perfume ID must be an integer.",
     "any.required": "Perfume ID is a required field.",
@@ -446,17 +453,15 @@ const updatePerfumeSchema = Joi.object({
       "Eau De Toilette",
       "Eau De Cologne"
     )
-    .required()
     .messages({
       "string.base": "Oil Concentration must be a text string.",
       "any.only":
         "Oil Concentration must be one of the following: Extrait De Parfum, Eau De Parfum, Eau De Toilette, Eau De Cologne.",
-      "any.required": "Oil Concentration is a required field.",
     }),
 });
 
 const updateOwnerSchema = Joi.object({
-  ownerId: Joi.number().integer().required().messages({
+  id: Joi.number().integer().required().messages({
     "number.base": "Owner ID must be a number.",
     "number.integer": "Owner ID must be an integer.",
     "any.required": "Owner ID is a required field.",

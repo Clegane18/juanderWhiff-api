@@ -139,7 +139,7 @@ const getPerfumeById = async ({ id }) => {
 };
 
 const updatePerfume = async ({
-  perfumeId,
+  id,
   brandId,
   originalPerfumeId,
   name,
@@ -154,7 +154,7 @@ const updatePerfume = async ({
   oilConcentration,
 }) => {
   try {
-    const perfume = await Perfume.findByPk(perfumeId);
+    const perfume = await Perfume.findByPk(id);
 
     if (!perfume) {
       return {

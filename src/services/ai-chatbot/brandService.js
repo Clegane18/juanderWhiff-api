@@ -2,7 +2,7 @@ const { Brand, Owner, Perfume } = require("../../database/models/index");
 const { normalizeTexts } = require("../../utils/normalize");
 
 const addBrand = async ({
-  ownerId,
+  id,
   name,
   country,
   description,
@@ -15,7 +15,7 @@ const addBrand = async ({
 
     const existingBrand = await Brand.findOne({
       where: {
-        ownerId,
+        id,
         name: normalizedName,
         country: normalizedCountry,
         description: normalizedDescription,
@@ -34,7 +34,7 @@ const addBrand = async ({
       };
     }
 
-    const ownerExists = await Owner.findByPk(ownerId);
+    const ownerExists = await Owner.findByPk(id);
     if (!ownerExists) {
       return {
         status: 404,
@@ -45,7 +45,7 @@ const addBrand = async ({
     }
 
     const newBrand = await Brand.create({
-      ownerId,
+      ownerId: id,
       name: normalizedName,
       country: normalizedCountry,
       description: normalizedDescription,
@@ -154,7 +154,7 @@ const getBrandsByOwnerId = async ({ id }) => {
 };
 
 const updateBrandId = async ({
-  brandId,
+  id,
   name,
   country,
   description,
@@ -162,7 +162,7 @@ const updateBrandId = async ({
   logoUrl,
 }) => {
   try {
-    const brand = await Brand.findByPk(brandId);
+    const brand = await Brand.findByPk(id);
 
     if (!brand) {
       return {

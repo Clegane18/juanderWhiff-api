@@ -17,9 +17,7 @@ router
 
 router
   .get("/:id", validateID, comparisonController.getComparisonByID)
-
   .put("/:id", validateComparisonBrand, comparisonController.updateComparison)
-
   .delete("/:id", validateID, comparisonController.deleteComparisonById);
 
 module.exports = router;

@@ -1,8 +1,8 @@
 const { PerfumeNote, Perfume, Note } = require("../../database/models/index");
 
-const addPerfumeNotes = async ({ perfumeId, noteIds, noteType }) => {
+const addPerfumeNotes = async ({ id, noteIds, noteType }) => {
   try {
-    const existingPerfume = await Perfume.findByPk(perfumeId);
+    const existingPerfume = await Perfume.findByPk(id);
     if (!existingPerfume) {
       return {
         status: 404,
@@ -25,14 +25,14 @@ const addPerfumeNotes = async ({ perfumeId, noteIds, noteType }) => {
       }
 
       const existingPerfumeNote = await PerfumeNote.findOne({
-        where: { perfumeId, noteId, noteType },
+        where: { perfumeId: id, noteId, noteType },
       });
       if (existingPerfumeNote) {
         continue;
       }
 
       const newPerfumeNote = await PerfumeNote.create({
-        perfumeId,
+        perfumeId: id,
         noteId,
         noteType,
       });
@@ -195,9 +195,9 @@ const getPerfumeNoteById = async ({ id }) => {
   }
 };
 
-const updatePerfumeNotes = async ({ perfumeId, noteIds, noteType }) => {
+const updatePerfumeNotes = async ({ id, noteIds, noteType }) => {
   try {
-    const existingPerfume = await Perfume.findByPk(perfumeId);
+    const existingPerfume = await Perfume.findByPk(id);
     if (!existingPerfume) {
       return {
         status: 404,
@@ -206,7 +206,7 @@ const updatePerfumeNotes = async ({ perfumeId, noteIds, noteType }) => {
     }
 
     const existingPerfumeNotes = await PerfumeNote.findAll({
-      where: { perfumeId },
+      where: { perfumeId: id },
     });
     const existingNoteIds = existingPerfumeNotes.map((note) => note.noteId);
 
@@ -234,7 +234,7 @@ const updatePerfumeNotes = async ({ perfumeId, noteIds, noteType }) => {
 
       if (existingNoteIds.includes(noteId)) {
         const existingPerfumeNote = await PerfumeNote.findOne({
-          where: { perfumeId, noteId },
+          where: { perfumeId: id, noteId },
         });
 
         if (existingPerfumeNote && existingPerfumeNote.noteType !== noteType) {
@@ -245,7 +245,7 @@ const updatePerfumeNotes = async ({ perfumeId, noteIds, noteType }) => {
 
       if (notesToAddOrUpdate.includes(noteId)) {
         const newPerfumeNote = await PerfumeNote.create({
-          perfumeId,
+          perfumeId: id,
           noteId,
           noteType,
         });

@@ -22,7 +22,7 @@ const getOwnerById = async (req, res) => {
 
 const updateOwnerById = async (req, res) => {
   const result = await ownerService.updateOwnerById({
-    ownerId: req.params.ownerId,
+    id: req.params.id,
     name: req.body.name,
     bio: req.body.bio,
   });

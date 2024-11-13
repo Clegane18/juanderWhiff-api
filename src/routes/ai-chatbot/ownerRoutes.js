@@ -7,12 +7,12 @@ const {
   validateUpdateOwner,
 } = require("../../middlewares/validators/aiChatbotValidators");
 
-router.post("/", validateAddOwner, ownerController.addOwner);
+router
+  .post("/", validateAddOwner, ownerController.addOwner)
+  .get("/", ownerController.getAllOwners);
 
-router.get("/", ownerController.getAllOwners);
-
-router.get("/:id", validateID, ownerController.getOwnerById);
-
-router.put("/:ownerId", validateUpdateOwner, ownerController.updateOwnerById);
+router
+  .get("/:id", validateID, ownerController.getOwnerById)
+  .put("/:id", validateUpdateOwner, ownerController.updateOwnerById);
 
 module.exports = router;

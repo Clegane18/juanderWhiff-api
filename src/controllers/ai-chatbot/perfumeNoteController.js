@@ -2,7 +2,7 @@ const perfumeNoteService = require("../../services/ai-chatbot/perfumeNoteSerivce
 
 const addPerfumeNotes = async (req, res) => {
   const result = await perfumeNoteService.addPerfumeNotes({
-    perfumeId: req.params.perfumeId,
+    id: req.params.id,
     noteIds: req.body.noteIds,
     noteType: req.body.noteType,
   });
@@ -23,7 +23,7 @@ const getPerfumeNoteById = async (req, res) => {
 
 const updatePerfumeNotes = async (req, res) => {
   const result = await perfumeNoteService.updatePerfumeNotes({
-    perfumeId: req.params.perfumeId,
+    id: req.params.id,
     noteIds: req.body.noteIds,
     noteType: req.body.noteType,
   });

@@ -2,7 +2,7 @@ const brandService = require("../../services/ai-chatbot/brandService");
 
 const addBrand = async (req, res) => {
   const result = await brandService.addBrand({
-    ownerId: req.params.ownerId,
+    id: req.params.id,
     name: req.body.name,
     country: req.body.country,
     description: req.body.description,
@@ -26,7 +26,7 @@ const getBrandsByOwnerId = async (req, res) => {
 
 const updateBrandId = async (req, res) => {
   const result = await brandService.updateBrandId({
-    brandId: req.params.brandId,
+    id: req.params.id,
     name: req.body.name,
     country: req.body.country,
     description: req.body.description,

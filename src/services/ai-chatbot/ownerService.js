@@ -97,9 +97,9 @@ const getOwnerById = async ({ id }) => {
   }
 };
 
-const updateOwnerById = async ({ ownerId, name, bio }) => {
+const updateOwnerById = async ({ id, name, bio }) => {
   try {
-    const owner = await Owner.findByPk(ownerId);
+    const owner = await Owner.findByPk(id);
 
     if (!owner) {
       return {

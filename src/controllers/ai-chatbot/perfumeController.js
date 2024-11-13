@@ -30,7 +30,7 @@ const getPerfumeById = async (req, res) => {
 
 const updatePerfume = async (req, res) => {
   const result = await perfumeService.updatePerfume({
-    perfumeId: req.params.perfumeId,
+    id: req.params.id,
     brandId: req.body.brandId,
     originalPerfumeId: req.body.originalPerfumeId,
     name: req.body.name,

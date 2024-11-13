@@ -6,9 +6,9 @@ const {
   validateID,
 } = require("../../middlewares/validators/aiChatbotValidators");
 
-router.post("/", validateAddNote, noteController.addNote);
-
-router.get("/", noteController.getAllNotes);
+router
+  .post("/", validateAddNote, noteController.addNote)
+  .get("/", noteController.getAllNotes);
 
 router.get("/:id", validateID, noteController.getNoteById);
 
