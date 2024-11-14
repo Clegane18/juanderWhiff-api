@@ -10,6 +10,8 @@ router
   .post("/", validateAddNote, noteController.addNote)
   .get("/", noteController.getAllNotes);
 
-router.get("/:id", validateID, noteController.getNoteById);
+router
+  .get("/:id", validateID, noteController.getNoteById)
+  .delete("/:id", validateID, noteController.deleteNoteById);
 
 module.exports = router;

@@ -17,4 +17,9 @@ const getNoteById = async (req, res) => {
   return res.status(result.status).json(result.data);
 };
 
-module.exports = { addNote, getAllNotes, getNoteById };
+const deleteNoteById = async (req, res) => {
+  const result = await noteService.deleteNoteById({ id: req.params.id });
+  return res.status(result.status).json(result.data);
+};
+
+module.exports = { addNote, getAllNotes, getNoteById, deleteNoteById };

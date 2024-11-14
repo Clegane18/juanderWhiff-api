@@ -95,4 +95,42 @@ const getNoteById = async ({ id }) => {
   }
 };
 
-module.exports = { addNote, getAllNotes, getNoteById };
+const deleteNoteById = async ({ id }) => {
+  try {
+    const note = await Note.findByPk(id, {
+      include: {
+        model: Perfume,
+        through: { attributes: [] },
+      },
+    });
+
+    if (!note) {
+      return {
+        status: 404,
+        data: { message: "Note not found" },
+      };
+    }
+
+    if (note.Perfumes && note.Perfumes.length > 0) {
+      return {
+        status: 400,
+        data: { message: "Cannot delete note with associated perfumes" },
+      };
+    }
+
+    await note.destroy();
+
+    return {
+      status: 200,
+      data: { message: "Note deleted successfully" },
+    };
+  } catch (error) {
+    console.error("Error deleting note:", error);
+    return {
+      status: 500,
+      data: { message: "An error occurred while deleting the note" },
+    };
+  }
+};
+
+module.exports = { addNote, getAllNotes, getNoteById, deleteNoteById };
