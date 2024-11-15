@@ -13,6 +13,7 @@ router
 
 router
   .get("/:id", validateID, ownerController.getOwnerById)
-  .put("/:id", validateUpdateOwner, ownerController.updateOwnerById);
+  .put("/:id", validateUpdateOwner, ownerController.updateOwnerById)
+  .delete("/:id", deleteOwnerById, ownerController.deleteOwnerById);
 
 module.exports = router;

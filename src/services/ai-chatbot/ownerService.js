@@ -1,4 +1,4 @@
-const Owner = require("../../database/models/ai-chatbot/ownerModel");
+const { Owner, Brand } = require("../../database/models/index");
 const { normalizeTexts } = require("../../utils/normalize");
 
 const addOwner = async ({ name, bio }) => {
@@ -138,4 +138,48 @@ const updateOwnerById = async ({ id, name, bio }) => {
   }
 };
 
-module.exports = { addOwner, getAllOwners, getOwnerById, updateOwnerById };
+const deleteOwnerById = async ({ id }) => {
+  try {
+    const owner = await Owner.findByPk(id, {
+      include: {
+        model: Brand,
+        as: "brands",
+      },
+    });
+
+    if (!owner) {
+      return {
+        status: 404,
+        data: { message: "Owner not found" },
+      };
+    }
+
+    if (owner.brands && owner.brands.length > 0) {
+      return {
+        status: 400,
+        data: { message: "Cannot delete owner with associated brands" },
+      };
+    }
+
+    await owner.destroy();
+
+    return {
+      status: 200,
+      data: { message: "Owner deleted successfully" },
+    };
+  } catch (error) {
+    console.error("Error deleting owner:", error);
+    return {
+      status: 500,
+      data: { message: "An error occurred while deleting the owner" },
+    };
+  }
+};
+
+module.exports = {
+  addOwner,
+  getAllOwners,
+  getOwnerById,
+  updateOwnerById,
+  deleteOwnerById,
+};

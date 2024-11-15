@@ -29,4 +29,17 @@ const updateOwnerById = async (req, res) => {
   return res.status(result.status).json(result.data);
 };
 
-module.exports = { addOwner, getAllOwners, getOwnerById, updateOwnerById };
+const deleteOwnerById = async (req, res) => {
+  const result = await ownerService.deleteOwnerById({
+    id: req.params.id,
+  });
+  return res.status(result.status).json(result.data);
+};
+
+module.exports = {
+  addOwner,
+  getAllOwners,
+  getOwnerById,
+  updateOwnerById,
+  deleteOwnerById,
+};
